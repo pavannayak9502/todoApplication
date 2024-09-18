@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/todoApplication/static/css/main.dc8aa27b.css",
+    "main.js": "/todoApplication/static/js/main.969b5aa5.js",
+    "static/js/453.767614a3.chunk.js": "/todoApplication/static/js/453.767614a3.chunk.js",
+    "static/media/Particles.webp": "/todoApplication/static/media/Particles.de1f98e81edf1419f461.webp",
+    "index.html": "/todoApplication/index.html",
+    "main.dc8aa27b.css.map": "/todoApplication/static/css/main.dc8aa27b.css.map",
+    "main.969b5aa5.js.map": "/todoApplication/static/js/main.969b5aa5.js.map",
+    "453.767614a3.chunk.js.map": "/todoApplication/static/js/453.767614a3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dc8aa27b.css",
+    "static/js/main.969b5aa5.js"
+  ]
+}
