@@ -1,0 +1,175 @@
+import React from "react";
+import { useState, useEffect } from "react";
+import "../src/App.css";
+
+
+function Task({task, index, handleEditTask, completeTask, deleteTask}){
+
+  return(
+    <div className="task" style={{textDecoration: task.completed ? "line-through" : ""}}>
+
+    {task.title}
+
+    <button onClick={()=>handleEditTask(index)}>Edit Task</button>
+
+    <button onClick={()=>completeTask(index)} id="button1">Complete</button>
+    
+    <button onClick={()=>{deleteTask(index)}}>Delete</button>
+    </div>
+  );
+};
+
+
+
+
+let App=()=>{
+
+  let[tasks, setTasks] = useState([
+    {
+      title: "Demo Title 1",
+      completed: true,
+    },
+    {
+      title: "Demo Title 2",
+      completed: false
+    }
+  ]);
+
+  let addTask =(title)=>{
+
+    let newTasks = [...tasks, {title, completed: false}];
+    setTasks(newTasks);
+  };
+
+
+
+  let completeTask=(index)=>{
+    let newTask = [...tasks];
+    newTask[index].completed = true;
+    setTasks(newTask);
+  };
+  
+  let deleteTask=(index)=>{
+    let newTask = [...tasks];
+    newTask.splice(index, 1);
+    setTasks(newTask);
+  };
+
+  let [remainingTasks, setRemainingTasks]=useState(0);
+  useEffect(()=>{
+    setRemainingTasks(tasks.filter(task => !task.completed).length);
+  },[tasks]);
+
+
+  let [completedTasks, setCompletedTasks]=useState(0);
+  useEffect(()=>{
+    setCompletedTasks(tasks.filter(task => task.completed).length);
+  },[tasks]);
+
+
+  let[editIndex, setEditIndex]=useState(null);
+  let[editValue, setEditValue]=useState("");
+
+
+  let handleEditTask=(index)=>{
+    setEditIndex(index);
+    setEditValue(tasks[index].title);
+  };
+
+  let handleSaveEdit=()=>{
+    let updateTask = tasks.map((task, index)=> index === editIndex ? {...task, title : editValue} : task);
+    setTasks(updateTask);
+    setEditIndex(null);
+    setEditValue("");
+  };
+
+  return(
+    <>
+    <div className="todo-Container">
+
+    <div className="header">TODO APP</div>
+
+    <div className="Tasks">
+      <ul>
+        <li>Completed ({completedTasks})</li>
+        <li>Pending ({remainingTasks})</li>
+      </ul>
+    </div>
+
+    <div className="tasks">
+    {
+      tasks.map((task, index)=>(
+        <Task  task={task} index={index} key={index} CreateTask={CreateTask} completeTask={completeTask} deleteTask={deleteTask} handleEditTask={handleEditTask} />
+      ))
+    }
+
+    {editIndex !== null &&(       /* editIndex !== null: This is a condition used to determine whether the JSX code inside the parentheses should be rendered.  &&: This logical AND operator is used for conditional rendering. If editIndex !== null evaluates to true, the JSX code after && will be rendered. If editIndex is null, nothing will be rendered.   */
+      <div>
+        <input type="text" value={editValue} onChange={(e)=>setEditValue(e.target.value)} id="editValue" autoComplete="off"/>
+        <button onClick={handleSaveEdit}>Save</button>
+      </div>
+    )}
+  
+    
+    </div>
+
+    <div className="create-task">
+      <CreateTask addTask={addTask} />
+    </div>
+
+    </div>
+    
+    
+    </>
+  );
+};
+
+function CreateTask({addTask}){
+
+  let[newTask, setNewTask]= useState("");
+
+  let handleSubmit=(data)=>{
+    data.preventDefault();
+    if(!newTask) return;
+
+    addTask(newTask);
+    setNewTask("");
+  };
+
+  return(
+    <div className="newTask">
+    <input type="text" value={newTask} onChange={(e)=>setNewTask(e.target.value)} placeholder="Add New Task" id="newTask" autoComplete="off" />
+    <button onClick={handleSubmit}>Add Task</button>
+    </div>
+  );
+};
+
+export default App;
+
+
+/*
+
+    Code line 79: Function handleSaveEdit()  => Breif Explaination
+
+tasks.map: This line creates a new array by iterating over each item in the tasks array. For each task, it checks if its index is equal to editIndex.
+
+index === editIndex ? {...tasks, title: editValue} : task:
+
+This is a ternary operator used to decide what to do with each task.
+index === editIndex: This checks if the current task is the one being edited (i.e., the task whose index matches editIndex).
+
+
+Expression If True: {...task, title: editValue}
+
+{...task}: This uses the spread operator to create a new object that includes all properties of the current task.
+title: editValue: This updates or sets the title property of the new object to the value of editValue (which is the new title entered by the user).
+So, if index is equal to editIndex, it means this is the task being edited, and the title of this task will be updated to the new value provided by the user.
+
+Expression If False: task
+
+If index is not equal to editIndex, the task remains unchanged and is included as-is in the new array.
+
+
+
+
+*/
